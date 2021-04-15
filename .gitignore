@@ -1,0 +1,8 @@
+sounds/
+city_view/
+*.kra
+*.log
+*.kra~
+*.code-workspace
+*.eslintcache
+*.png~

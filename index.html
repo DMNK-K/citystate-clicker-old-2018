@@ -1,0 +1,595 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!--================================================================>
+<======== CODE, GRAPHICS & SOUND COPYRIGHT D. KREISER 2018 =========>
+<=================================================================-->
+
+<head>
+    <meta charset="utf-8" />
+    <title>CityState Clicker</title>
+    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js?ver=1.4.4'></script>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Forum" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Overlock" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet"/>
+    <link rel="icon" href="misc_images/page_icon.png"/>
+</head>
+
+<body>
+    <audio src="sounds/click_food0.ogg" id="audio_food0"></audio>
+    <audio src="sounds/click_food1.ogg" id="audio_food1"></audio>
+    <audio src="sounds/click_food2.ogg" id="audio_food2"></audio>
+    <audio src="sounds/click_food3.ogg" id="audio_food3"></audio>
+    <audio src="sounds/click_wood0.ogg" id="audio_wood0"></audio>
+    <audio src="sounds/click_wood1.ogg" id="audio_wood1"></audio>
+    <audio src="sounds/click_wood2.ogg" id="audio_wood2"></audio>
+    <audio src="sounds/click_stone0.ogg" id="audio_stone0"></audio>
+    <audio src="sounds/click_stone1.ogg" id="audio_stone1"></audio>
+    <audio src="sounds/click_stone2.ogg" id="audio_stone2"></audio>
+    <audio src="sounds/click_stone3.ogg" id="audio_stone3"></audio>
+    <audio src="sounds/click_metal0.ogg" id="audio_metal0"></audio>
+    <audio src="sounds/click_metal1.ogg" id="audio_metal1"></audio>
+    <audio src="sounds/click_metal2.ogg" id="audio_metal2"></audio>
+    <audio src="sounds/click_metal3.ogg" id="audio_metal3"></audio>
+    <audio src="sounds/tick.ogg" id="audio_tick"></audio>
+  
+    <div id="info_wrapper" class="whole_scrn_wrapper">
+        <div id="info">
+            <button class="info_nav_button" id="info_game_button">About</button>
+            <button class="info_nav_button" id="info_changelog_button">Development Log</button>
+            <button class="info_nav_button" id="info_close_button">X</button>
+            <div id="info_content_wrapper">
+                <div id="info_content_game"></div>
+                <div id="info_content_changelog"></div>
+            </div> 
+        </div>
+    </div>
+    <div id ="settings_wrapper" class="whole_scrn_wrapper">
+        <div id="settings">
+            <button id="settings_close_button">X</button>
+            <div class="setting_row">
+                <span>Sound effects:</span>
+                <button id="button_setting_sfx">on</button>
+            </div>
+            <div class="setting_row">
+                <span>Music:</span>
+                <button id="button_setting_music">on</button>
+            </div>
+            <div class="setting_row">
+                <span>Display gamelog timestamps:</span>
+                <button id="button_setting_timestamps">on</button>
+            </div>
+            <div class="setting_row">
+                <span>Display mood logs:</span>
+                <button id="button_setting_mood">on</button>
+            </div>
+            <div class="setting_row">
+                <span>Hide orange logs after delay:</span>
+                <button id="button_setting_orange">off</button>
+            </div>
+        </div>
+    </div>
+    <div id="are_you_sure_wrapper" class="whole_scrn_wrapper">
+        <div id="are_you_sure">
+            <p>Are you sure you want to start a new game? This will delete your current save.</p>
+            <button class="btn_norm">Yes</button>
+            <button class="btn_norm">No</button>
+        </div>
+    </div>
+
+    <div id="cookie_notice">
+        <p>
+            This website uses cookies to save the progress of your game and keep track of game settings. By using this website you agree to the use of cookie technology.
+            You can find out more <a>here</a>.
+        </p>
+        <button id="cookie_accept">I Understand</button>
+    </div>
+    <div id="gameover_scrn"><div id="gameover_text">GAME OVER</div></div>
+    <div id="gamewin_scrn"><div id="gamewin_text">VICTORY</div></div>
+
+    <div class="row">
+        <div class="col-20" id="banner">
+            <div id="banner_utility_wrapper">
+                &copy; 2021 Dominik Kreiser     
+            </div>
+            <div id="title_box">
+                <img src="misc_images/page_icon.png" class="title_img img_pf"/>
+                <span id="title">CityState Clicker</span>
+                <img src="misc_images/page_icon.png" class="title_img img_pf" />
+            </div>
+            <div id="banner_button_wrapper">
+                <button class="banner_button" id="button_new_game">New Game</button>
+                <button class="banner_button" id="button_info">Info</button>
+                <button class="banner_button" id="button_settings">Settings</button>
+                <button class="banner_button" id="button_sfx"><img class="banner_button_icon bb_icon_on" src="misc_images/sfx_icon.png"/></button>
+                <button class="banner_button" id="button_music"><img class="banner_button_icon bb_icon_on" src="misc_images/music_icon.png"/></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-5" id="toppanel_left">
+            <div class="menu_wrapper">
+                <div id="city_menu"></div>
+            </div>
+        </div>
+        <div class="col-10" id="toppanel_mid">
+            <div id="preview_space">
+                <div id="time_box" class="uns prev_tab">
+                    Day 0 of year 1.
+                </div>
+                <button id="pantheon_tab" class="prev_tab">
+                    Pantheon
+                </button>
+                <button id="city_view_tab" class="prev_tab">
+                    City View
+                </button>
+                <button id="world_view_tab" class="prev_tab">
+                    World View
+                </button>
+                <button id="military_tab" class="prev_tab">
+                    Military
+                </button>
+                <div id="pantheon_view" class="mid_view">
+                    <div class="god_tab" id="god_tab0">
+                        <div class="god_left"></div>
+                        <div class="god_circle"></div>
+                        <div class="god_right"></div>
+                        <div class="god_name">-</div>
+                        <div class="god_desc"></div>
+                        <button disabled="true" class="god_accept" id="god_accept0">Accept</button>
+                    </div>
+                    <div class="god_tab" id="god_tab1">
+                        <div class="god_left"></div>
+                        <div class="god_circle"></div>
+                        <div class="god_right"></div>
+                        <div class="god_name">-</div>
+                        <div class="god_desc"></div>
+                        <button disabled="true" class="god_accept" id="god_accept1">Accept</button>
+                    </div>
+                    <div class="god_tab" id="god_tab2">
+                        <div class="god_left"></div>
+                        <div class="god_circle"></div>
+                        <div class="god_right"></div>
+                        <div class="god_name">-</div>
+                        <div class="god_desc"></div>
+                        <button disabled="true" class="god_accept" id="god_accept2">Accept</button>
+                    </div>
+                    <div class="god_tab" id="god_tab3">
+                        <div class="god_left"></div>
+                        <div class="god_circle"></div>
+                        <div class="god_right"></div>
+                        <div class="god_name">-</div>
+                        <div class="god_desc"></div>
+                        <button disabled="true" class="god_accept" id="god_accept3">Accept</button>
+                    </div>
+                    <div class="god_tab" id="god_tab4">
+                        <div class="god_left"></div>
+                        <div class="god_circle"></div>
+                        <div class="god_right"></div>
+                        <div class="god_name">-</div>
+                        <div class="god_desc"></div>
+                        <button disabled="true" class="god_accept" id="god_accept4">Accept</button>
+                    </div>
+                </div>
+                <div id="city_view"class="mid_view">
+                    <div id="city_bcg">
+                        <img class="cvimg_special img_pf" id="cvimg_houses" src="city_view/houses_0.png"/>
+                    
+                    </div>
+                </div>
+                <div id="world_view"class="mid_view">
+                    <div id="world_map">
+
+                    </div>
+                    <div id="foreign_city_info">
+                        <p id="foreign_city_name">-</p>
+                        <div class="foreign_city_det" id="foreign_city_det0">
+                            <p>Size lvl:</p>
+                            <p>Walls lvl:</p>
+                            <p>Export:</p>
+                            <p>Import:</p>
+                            <p>Currency from trade:</p>
+                            <p>Sea access:</p>
+                        </div>
+                        <div class="foreign_city_det" id="foreign_city_det1">
+                                
+                        </div>
+                        <div class="foreign_city_det" id="foreign_city_det2">
+                              <p>Relations:</p>
+                              <p>Defense strength:</p>
+                              <p>Land units:</p>
+                              <p>Naval units:</p>
+                              <p>Influence:</p>
+                        </div>
+                        <div class="foreign_city_det" id="foreign_city_det3">
+                                
+                        </div>
+                        <button id="foreign_city_trade" class="foreign_city_button fcb_wide">Establish Trade Route</button>
+                        <button id="foreign_city_diplomat"class="foreign_city_button">Send Diplomat</button>
+                        <button id="foreign_city_spy"class="foreign_city_button fcb_narrow">Spy</button>
+                        <div id="foreign_city_invade"class="foreign_city_button fcb_wide">
+                            Invade
+                            <button id="foreign_city_army1">Army 1</button>
+                            <button id="foreign_city_army2">Army 2</button>
+                        </div>
+                        <button id="foreign_city_governor"class="foreign_city_button fcb_wide">Install Puppet Governor</button>
+                    </div>
+                </div>
+                <div id="military_view"class="mid_view">
+                    <div id="garrison_wrapper">
+                        <div class="unit_row" id="unit_row_warriors">
+                            <div class="unit_number">0</div>
+                            <button class="unit_button uns" disabled="true"><img class="unit_img img_pf" src="military_icons/icon_unit_warriors.png"/></button>
+                            <img class="unit_cost_icon" src="resource_icons/icon_money.png"/>
+                            <div class="unit_cost" id="unit_cost_money">10</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_food.png"/>
+                            <div class="unit_cost" id="unit_cost_food">20</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_metal.png"/>
+                            <div class="unit_cost" id="unit_cost_metal">5</div>
+                        </div>
+                        <div class="unit_row" id="unit_row_archers">
+                            <div class="unit_number">0</div>
+                            <button class="unit_button uns" disabled="true"><img class="unit_img img_pf" src="military_icons/icon_unit_archers.png"/></button>
+                            <img class="unit_cost_icon" src="resource_icons/icon_money.png"/>
+                            <div class="unit_cost" id="unit_cost_money">10</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_food.png"/>
+                            <div class="unit_cost" id="unit_cost_food">20</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_wood.png"/>
+                            <div class="unit_cost" id="unit_cost_wood">5</div>
+                        </div>
+                        <div class="unit_row" id="unit_row_cavalry">
+                            <div class="unit_number">0</div>
+                            <button class="unit_button uns" disabled="true"><img class="unit_img img_pf" src="military_icons/icon_unit_cavalry.png"/></button>
+                            <img class="unit_cost_icon" src="resource_icons/icon_money.png"/>
+                            <div class="unit_cost" id="unit_cost_money">15</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_food.png"/>
+                            <div class="unit_cost" id="unit_cost_food">30</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_metal.png"/>
+                            <div class="unit_cost" id="unit_cost_metal">5</div>
+                        </div>
+                        <div class="unit_row" id="unit_row_siege_engine">
+                            <div class="unit_number">0</div>
+                            <button class="unit_button uns" disabled="true"><img class="unit_img img_pf" src="military_icons/icon_unit_siege_engine.png"/></button>
+                            <img class="unit_cost_icon" src="resource_icons/icon_money.png"/>
+                            <div class="unit_cost" id="unit_cost_money">20</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_wood.png"/>
+                            <div class="unit_cost" id="unit_cost_wood">25</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_metal.png"/>
+                            <div class="unit_cost" id="unit_cost_metal">15</div>
+                        </div>
+                        <div class="unit_row" id="unit_row_galley">
+                            <div class="unit_number">0</div>                               
+                            <button class="unit_button uns" disabled="true"><img class="unit_img img_pf" src="military_icons/icon_unit_galley.png"/></button>
+                            <img class="unit_cost_icon" src="resource_icons/icon_money.png"/>
+                            <div class="unit_cost" id="unit_cost_money">25</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_wood.png"/>
+                            <div class="unit_cost" id="unit_cost_wood">60</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_metal.png"/>
+                            <div class="unit_cost" id="unit_cost_metal">15</div>
+                        </div>
+                        <div class="unit_row" id="unit_row_galleass">
+                            <div class="unit_number">0</div>
+                            <button class="unit_button uns" disabled="true"><img class="unit_img img_pf" src="military_icons/icon_unit_galleass.png"/></button>
+                            <img class="unit_cost_icon" src="resource_icons/icon_money.png"/>
+                            <div class="unit_cost" id="unit_cost_money">30</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_wood.png"/>
+                            <div class="unit_cost" id="unit_cost_wood">100</div>
+                            <img class="unit_cost_icon" src="resource_icons/icon_metal.png"/>
+                            <div class="unit_cost" id="unit_cost_metal">20</div>
+                        </div>
+                    </div>
+                    <div class="army_wrapper" id="army1">
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                    </div>
+                    <div class="army_wrapper" id="army2">
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                        <div class="army_row">
+                            <button class="army_button_minus">-5</button>
+                            <button class="army_button_minus">-1</button>
+                            <span>0</span>
+                            <button class="army_button_plus">+1</button>
+                            <button class="army_button_plus">+5</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="debug_window"></div>
+            </div>
+        </div>
+        <div class="col-5" id="toppanel_right">
+            <h2>Gathering Resources</h2>
+            <div class="button_wrapper" id="button_wrapper1">
+                <button class="gathering_button" id="food_button">Food<div class="g_amount"></div></button>
+                <button class="gathering_button" id="wood_button">Wood<div class="g_amount"></div></button>
+                <button class="gathering_button" id="stone_button">Stone<div class="g_amount"></div></button>
+                <button class="gathering_button" id="metal_button">Metal<div class="g_amount"></div></button>
+            </div>
+            <h2>Management</h2>
+            <div class="button_wrapper">
+                <button class="management_button btn_norm" id="rations_button" disabled="true">
+                    <div class="management_progress"></div>
+                    <p class="management_label">Food Rations: Standard</p>
+                    <div class="management_details"><div></div></div>
+                </button>
+                <button class="management_button btn_norm" id="tax_button" disabled="true">
+                    <div class="management_progress"></div>
+                    <p class="management_label">Collect Taxes</p>
+                    <div class="management_details"><div></div></div>
+                </button>
+                <button class="management_button btn_norm" id="experiment_button" disabled="true">
+                    <div class="management_progress"></div>
+                    <p class="management_label">Conduct Experiment</p>
+                    <div class="management_details"><div></div></div>
+                </button>
+                <button class="management_button btn_norm" id="holiday_button" disabled="true">
+                    <div class="management_progress"></div>
+                    <p class="management_label">Announce Holiday</p>
+                    <div class="management_details"><div></div></div>
+                </button>
+            </div>
+            <h2>Trade</h2>
+            <button id="trade_button" class="btn_norm" disabled="true">Trade</button>
+            <div id="trade">Trader unavailable.</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-5" id="botpanel_left">
+            <div class="menu_wrapper">
+                <div id="bld_menu">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-10" id="botpanel_mid">
+            <div id="resource_bar">
+                <div class="resource_div uns">
+                    <img class="resource_icon" src="resource_icons/icon_food.png"/>
+                    <span class="resource_span" id="res_food">0</span>
+                </div>
+                <div class="resource_div uns">
+                    <img class="resource_icon" src="resource_icons/icon_wood.png"/>
+                    <span class="resource_span" id="res_wood">0</span>
+                </div>
+                <div class="resource_div uns">
+                    <img class="resource_icon" src="resource_icons/icon_stone.png"/>
+                    <span class="resource_span" id="res_stone">0</span>
+                </div>
+                <div class="resource_div uns">
+                    <img class="resource_icon" src="resource_icons/icon_metal.png"/>
+                    <span class="resource_span" id="res_metal">0</span>
+                </div>
+                <div class="resource_div uns">
+                    <img class="resource_icon" src="resource_icons/icon_money.png"/>
+                    <span class="resource_span" id="res_money">0</span>
+                </div>
+                <div class="resource_div uns">
+                    <img class="resource_icon" src="resource_icons/icon_knowl.png"/>
+                    <span class="resource_span" id="res_knowl">0</span>
+                </div>
+                <div class="resource_div uns">
+                    <img class="resource_icon" id="res_icon_hap" src="resource_icons/icon_happ3.png"/>
+                    <span class="resource_span" id="res_hap">0</span>
+                </div>
+                <div class="resource_div uns">
+                    <img class="resource_icon" src="resource_icons/icon_pop.png"/>
+                    <span class="resource_span" id="res_pop">0</span>
+                </div>
+            </div>
+            <div id="game_log">
+                
+            </div>
+        </div>
+        <div class="col-5" id="botpanel_right">
+            <div class="menu_wrapper">
+                <div id="tech_menu">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hover_box" id="hb_type0">
+
+    </div>
+    <div class="hover_box" id="hb_type1">
+        
+    </div>
+</body>
+<script type="text/javascript" src="core_variables.js"></script>
+<script type="text/javascript" src="vv_utility.js"></script>
+<script type="text/javascript" src="buildings.js"></script>
+<script type="text/javascript" src="techs.js"></script>
+<script type="text/javascript" src="management.js"></script>
+<script type="text/javascript" src="info_content.js"></script>
+<script type="text/javascript" src="r_events_bad.js"></script>
+<script type="text/javascript" src="r_events_good.js"></script>
+<script type="text/javascript" src="pantheon.js"></script>
+<script type="text/javascript" src="world_and_military.js"></script>
+<script type="text/javascript" src="save_and_load.js"></script>
+<script type="text/javascript" src="debug.js"></script>
+<script type="text/javascript" src="special_ui_features.js"></script>
+<script type="text/javascript" src="settings.js"></script>
+<script type="text/javascript" src="info.js"></script>
+<script type="text/javascript" src="manual_gathering.js"></script>
+
+<script type="text/javascript" src="processes_fast.js"></script>
+<script type="text/javascript" src="processes_slow.js"></script>
+<script type="text/javascript" src="city_development.js"></script>
+<script type="text/javascript" src="city_view.js"></script>
+
+<script type="text/javascript" src="new_game_pass.js"></script>
+<script type="text/javascript" src="core_time.js"></script>
+
+<script>
+
+    function PlaySound(id)
+    {
+        if(settings.volume_effects === 0){return;}
+        if(settings.mute_effects === true){return;}
+        document.getElementById(id).pause;
+        document.getElementById(id).currentTime = 0;
+        document.getElementById(id).play();
+    }
+
+    $('#button_new_game').click(function()
+    {
+        $('#are_you_sure_wrapper').fadeIn(200);
+    });
+    $('#are_you_sure button').click(function()
+    {
+        if($(this).html() == 'Yes')
+        {
+            save_blocked = true;
+            DeleteSave();
+            location.reload();
+        }
+        else
+        {
+            $('#are_you_sure_wrapper').fadeOut(0);
+        }
+    });
+    $('#cookie_accept').click(function()
+    {
+        $('#cookie_notice').fadeOut(250);
+        SetCookie("cookies", "yes", 365);
+    });
+    $('#cookie_notice a').click(function()
+    {
+        $('#info_content_changelog').hide();
+        $('#info_content_game').show();
+        $('#info_wrapper').fadeIn(200);
+        $('#info_content_game').scrollTop($('#info_content_game').height());
+    });
+    if(GetCookie("cookies") != "yes")
+    {
+        $('#cookie_notice').show();
+    }
+    if(GetCookie("music") != "empty")
+    {
+        volume_music = GetCookie("music") * 1;
+        if(volume_music > 0)
+        {
+            $('#button_music .banner_button_icon').removeClass('bb_icon_off');
+            $('#button_music .banner_button_icon').addClass('bb_icon_on');
+        }
+        else
+        {
+            $('#button_music .banner_button_icon').removeClass('bb_icon_on');
+            $('#button_music .banner_button_icon').addClass('bb_icon_off');
+        }
+    }
+    if(GetCookie("sfx") != "empty")
+    {
+        volume_effects = GetCookie("sfx") * 1;
+        if(volume_effects > 0)
+        {
+            $('#button_sfx .banner_button_icon').removeClass('bb_icon_off');
+            $('#button_sfx .banner_button_icon').addClass('bb_icon_on');
+        }
+        else
+        {
+            $('#button_sfx .banner_button_icon').removeClass('bb_icon_on');
+            $('#button_sfx .banner_button_icon').addClass('bb_icon_off');
+        }
+    }
+
+    $(document).ready(function()
+    {
+        $('.twitter_link').attr("href",link_twitter);
+        $('.twitter_link').attr("target","_blank");
+    });
+
+    if(HasSave())
+    {
+        LoadGame();
+    }
+    else
+    {
+        GenerateCityStates();
+        CreateMap(); 
+    }
+
+    PopulateWorldMap();  
+    UpdateMapDisplay();
+    UpdateCityStateButtons();
+
+    window.onbeforeunload = function()
+    {
+        if(save_blocked == false){SaveGame();}
+    };
+</script>
+</html>
