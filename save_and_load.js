@@ -166,12 +166,20 @@ function SaveTech()
 function LoadTech()
 {
     let tech_array = GetCookie("tech").split(sep1);
+    console.log("n of found tech in saved cookie: " + tech_array.length);
     for(var i = 0; i < tech_array.length; i++)
     {
         const t = tech_array[i].split(sep0);
         const t_prop_name = t[0];
         const t_completed = t[1];
-        tech[t_prop_name].completed = (t_completed == 1) ? true : false;
+        if (tech.hasOwnProperty(t_prop_name))
+        {
+            tech[t_prop_name].completed = (t_completed == 1) ? true : false;
+        }
+        else
+        {
+            console.log("tech has no property: " + t_prop_name);
+        }
     }
 }
 
